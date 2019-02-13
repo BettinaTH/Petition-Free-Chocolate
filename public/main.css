@@ -1,0 +1,9 @@
+/*the main css of the website*/
+body{
+    background-color: chocolate
+},
+
+h1{
+font-family: Verdana, Geneva, Tahoma, sans-serif;
+font-style: bold; 
+}
