@@ -1,19 +1,44 @@
-const express = require('express')
+const express = require('express');
 const app = express();
-
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+const csurf = require('csurf');
 const db = require ('./db');
 
 /// HANDLEBARS DO NOT TOUCH CODE BELOW /////
 var hb = require('express-handlebars');
 app.engine('handlebars', hb());
 app.set('view engine', 'handlebars');
+app.use(function (req, res, next) {
+    console.log(req.url);
+    next();
+});
 /// HANDLEBARS DO NOT TOUCH CODE ABOVE /////
 
-app.use(
-    express.static('./wintergreen-petition')
+// COOKIE SESSION
+app.use(cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 14 // Cookies lasts 2 weeks
+}));
+
+app.use(bodyParser.urlencoded({
+    extended: false
+})
 );
 
-// LINKINK TO THE CSS
+app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.setHeader("X-Frame-Options","DENY")
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
+//app.use(cookieParser());
+
+
+
+// LINK TO THE CSS
 app.use(
     express.static('./public')
 );
@@ -25,6 +50,21 @@ app.get("/petition", function(req, res) {
         layout: "main"
     });
 });
+
+// GET THANKS //
+app.get("/thanks", function(req, res) {
+    res.render("thanks", {
+        layout: "main"
+    });
+});
+
+// GET SIGNERS //
+app.get("/signers", function(req, res) {
+    res.render("signers", {
+        layout: "main"
+    });
+});
+
 
 
 app.get('/get-cities', (req, res) =>{
