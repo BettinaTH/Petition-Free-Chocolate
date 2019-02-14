@@ -1,9 +1,22 @@
 /*the main css of the website*/
 body{
     background-color: chocolate
-},
+}
 
 h1{
 font-family: Verdana, Geneva, Tahoma, sans-serif;
 font-style: bold; 
+}
+h2{
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+p{
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+canvas{
+    border: 2px dotted #000000;
+}
+.signup{
+    display: inline-block;
 }
