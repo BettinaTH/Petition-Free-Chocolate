@@ -42,7 +42,10 @@ app.use(function(req, res, next) {
 app.use(
     express.static('./public')
 );
+// REGISTER//
 
+
+// LOGIN //
 
 // GET PETITION//
 app.get("/petition", function(req, res) {
@@ -50,6 +53,18 @@ app.get("/petition", function(req, res) {
         layout: "main"
     });
 });
+
+// POST PETITION
+app.post("/petition", function(req, res) {
+    console.log(req.body);
+    if (!req.body.first || !req.body.last ||!req.body.signURL) {
+        res.render("petition",{
+            err: "All fields are required",
+            layout: "main" 
+        });
+    }
+});
+    
 
 // GET THANKS //
 app.get("/thanks", function(req, res) {
@@ -61,6 +76,20 @@ app.get("/thanks", function(req, res) {
 // GET SIGNERS //
 app.get("/signers", function(req, res) {
     res.render("signers", {
+        layout: "main"
+    });
+});
+
+// GET REGISTER
+app.get("/register", function(req, res) {
+    res.render("register", {
+        layout: "main"
+    });
+});
+
+// GET LOGIN
+app.get("/login", function(req, res) {
+    res.render("login", {
         layout: "main"
     });
 });
