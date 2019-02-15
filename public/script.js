@@ -28,5 +28,5 @@ canvasSignature.addEventListener("mousedown", (e) => {
 document.addEventListener("mouseup", function(){  
     console.log("end point");
     canvasSignature.removeEventListener("mousemove", mousemove);
-
+    document.querySelector("input[type='hidden']").value = canvasSignature.toDataURL();
 });
