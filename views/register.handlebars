@@ -1,0 +1,17 @@
+<h2> PLEASER Register </h2>
+    <form method="POST">
+    <div>
+        <div class="register">
+        <input name="first" placeholder="First name" value="{{first}}">
+        <input name="last" placeholder="Last name" value="{{last}}">
+        <input id="email" name="email" placeholder="Email" value="{{email}}">
+        <input id="password" name="password" type="password" placeholder="******">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="Register">
+            <button type="submit" class="button"> SIGN UP</button>
+            </div>
+    </div>    
+    <div>
+        <h3>If your are already registered, please login here</h3>
+    </div>
+    </form>

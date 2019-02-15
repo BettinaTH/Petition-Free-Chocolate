@@ -2,10 +2,14 @@
 <h2>Free chocolate for everyone</h2>
 <p> Sign up for my petition to get 1kg chocolate for free every month</p>
 
-<div class = "signup">
-    <input name="first" placeholder="First name" value={{first}}>
-    <input name="last" placeholder="Last name" value={{last}}>
-    <canvas id="signature" width="500" height="100"></canvas>
-    <button type="button">Submit</button>
-</div>
+<form method="POST">
+    <div class = "signup">
+        <input name="first" placeholder="First name" value={{first}}>
+        <input name="last" placeholder="Last name" value={{last}}>
+        <input name="signURL" type="hidden"
+        <input  name="_csrf" type="hidden" value={{csrfToken}}>
+        <canvas id="signature" name="sig" width="500" height="100"></canvas>
+        <button name="button">Submit</button>
+    </div>
+</form>
 <script src="script.js"></script>
