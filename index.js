@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const csurf = require('csurf');
 const db = require ('./db');
 
+
+
 /// HANDLEBARS DO NOT TOUCH CODE BELOW /////
 var hb = require('express-handlebars');
 app.engine('handlebars', hb());
@@ -42,10 +44,61 @@ app.use(function(req, res, next) {
 app.use(
     express.static('./public')
 );
-// REGISTER//
+
+// REGISTER
+app.get("/register", function(req, res) {
+    res.render("register", {
+        layout: "main"
+    });
+});
+
+app.post("/register", function(req, res){
+    console.log(req.body);
+// check the required fields
+// IF all fields are filed out, send data to database (table users), hash the password and redirect them to petition
+// database sends back the users ID as a cookie
+    if (req.body.first && req.body.last && req.body.email && req.password){
+        //db.register(req.body.first, req.body.last, req.body.email, req.password);
+        res.redirect("/petition");
+       
+    } else {
+        res.render('register', {
+            layout: "error",
+        });
+    }});
+
+// USER PROFILE
+app.get("/profile", function(req, res) {
+    res.render("user_profiles", {
+        layout: "main"
+    });
+});
+
+/*
+app.post("/profile", function (req, res){
+    if (req.session.age || req.session.city || req.session.url){
+// put data in new table users_profile
+    });
+});*/
 
 
-// LOGIN //
+
+//LOGIN
+app.get("/login", function(req, res) {
+    res.render("login", {
+        layout: "main"
+    });
+});
+
+
+// EDITING PROFILE
+app.get("/edit", function(req, res) {
+    res.render("editing", {
+        layout: "main"
+    });
+});
+
+
 
 // GET PETITION//
 app.get("/petition", function(req, res) {
@@ -80,22 +133,10 @@ app.get("/signers", function(req, res) {
     });
 });
 
-// GET REGISTER
-app.get("/register", function(req, res) {
-    res.render("register", {
-        layout: "main"
-    });
-});
-
-// GET LOGIN
-app.get("/login", function(req, res) {
-    res.render("login", {
-        layout: "main"
-    });
-});
 
 
 
+// SHOW ALL SIGNERS OF THE PETITION
 app.get('/get-cities', (req, res) =>{
     //this is just for demo purposes
     db.getAllCities().then(results => {
