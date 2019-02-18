@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 var spicedPg = require('spiced-pg');
 
 
-var db = spicedPg('postgres:postgress:postgress@localhost:5432/wintergreen-petition');
+var db = spicedPg('postgres:postgres:postgres@localhost:5432/wintergreen-petition');
 
 /* This QUERY is just for Demo purpose
 

@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const csurf = require('csurf');
 const db = require ('./db');
+const hashPassword = require ('./auth.js').hashPassword;
 
 
 
@@ -46,21 +47,29 @@ app.use(
 );
 
 // REGISTER
-app.get("/register", function(req, res) {
+app.get("/register", (req, res) => {
     res.render("register", {
         layout: "main"
     });
 });
 
-app.post("/register", function(req, res){
+app.post("/register", (req, res) =>{
     console.log(req.body);
 // check the required fields
 // IF all fields are filed out, send data to database (table users), hash the password and redirect them to petition
 // database sends back the users ID as a cookie
-    if (req.body.first && req.body.last && req.body.email && req.password){
-        //db.register(req.body.first, req.body.last, req.body.email, req.password);
-        res.redirect("/petition");
-       
+    if (req.body.first && req.body.last && req.body.email && req.body.password){
+        hashPassword(req.body.password).then(hashedPassword =>{
+            db.register(req.body.first, req.body.last, req.body.email, hashedPassword).then(data => {
+                req.session.id = data.rows[0].id;
+                req.session.first = req.body.first;
+                req.session.last = req.body.last;
+                req.session.email = req.body.email;
+                console.log('data =>: ', data);
+            });
+        });
+        
+        res.redirect("/profile");
     } else {
         res.render('register', {
             layout: "error",
@@ -68,7 +77,7 @@ app.post("/register", function(req, res){
     }});
 
 // USER PROFILE
-app.get("/profile", function(req, res) {
+app.get("/profile", (req, res) => {
     res.render("user_profiles", {
         layout: "main"
     });
