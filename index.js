@@ -64,12 +64,11 @@ app.post("/register", (req, res) =>{
                 req.session.id = data.rows[0].id;
                 req.session.first = req.body.first;
                 req.session.last = req.body.last;
-                req.session.email = req.body.email;
+                //req.session.email = req.body.email;
                 console.log('data =>: ', data);
+                res.redirect("/profile");
             });
-        });
-        
-        res.redirect("/profile");
+        });   
     } else {
         res.render('register', {
             layout: "error",
@@ -82,6 +81,12 @@ app.get("/profile", (req, res) => {
         layout: "main"
     });
 });
+app.post("/profile", (req, res) =>{
+    console.log("profile: ", req.body);
+    db.moreProfile(req.body.age, req.body.city, req.body.url, req.session.id);
+    res.redirect("/petition");
+});
+
 
 /*
 app.post("/profile", function (req, res){
@@ -124,6 +129,10 @@ app.post("/petition", function(req, res) {
             err: "All fields are required",
             layout: "main" 
         });
+    } else {
+        db.submitPetition(req.body.signURL, req.session.id);
+        console.log('signature: ', req.body.sig);
+        res.redirect("/thanks");
     }
 });
     

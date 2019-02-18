@@ -1,5 +1,6 @@
+DROP TABLE IF EXISTS signature CASCADE;
+DROP TABLE IF EXISTS users_profile CASCADE;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS signature;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -14,3 +15,11 @@ CREATE TABLE signature(
     signURL text NOT NULL,
     user_id INT NOT NULL REFERENCES users(id)
     );
+
+CREATE TABLE users_profile(
+    id SERIAL PRIMARY KEY,
+    age INT,
+    city VARCHAR (150),
+    url VARCHAR (500),
+    user_id INT NOT NULL REFERENCES users(id)
+);
