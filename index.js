@@ -139,9 +139,15 @@ app.post("/petition", function(req, res) {
     
 
 // GET THANKS //
-app.get("/thanks", function(req, res) {
-    res.render("thanks", {
-        layout: "main"
+app.get("/thanks", (req, res) => {
+    db.showSignature(req.session.id).then(result =>{
+        console.log('err results: ', result.rows[0]);
+        console.log('err results 2: ', result.rows[0].signurl);
+        res.render("thanks", {
+            layout: "main",
+            sig: result.rows[0].signurl
+
+        });
     });
 });
 

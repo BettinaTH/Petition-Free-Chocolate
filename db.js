@@ -21,15 +21,16 @@ module.exports.register = function register(first, last, email, password){
         [first, last, email, password]);
 };
 
-// USER ADDS MORE PROFILE //
+// USER ADDS MORE PROFILE 
 module.exports.moreProfile = function moreProfile(age, city, url, user_id){
     return db.query('INSERT INTO users_profile(age, city, url, user_id) VALUES ($1, $2, $3, $4)', [age, city,url, user_id])
 };
 
-// LOGIN STUFF //
+// checkin 
 module.exports.checkLogin = function checkLogin(email){
     return db.query('SELECT * FROM users WHERE email=$1', [email]);
 };
+// check Password 
 module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
     return new Promise(function(resolve, reject) {
         bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
@@ -42,15 +43,17 @@ module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, ha
     });
 };
 
-// PETITION STUFF //
-
-
 // STORE THE USER ID AND SIGNATURE TO TABLE signatrure
 module.exports.submitPetition = function submitPetition(signURL, user_id) {
     return db.query('INSERT INTO signature (signURL, user_id) VALUES ($1, $2)', [signURL, user_id]);
 };
 
-// Show all *** check users_id in signature with users TABLE
+// Show all signers 
 module.exports.allSigners = function allSigner(){
     return db.query('SELECT first, last, age, city, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id'); 
+};
+
+// show signature image
+module.exports.showSignature = function showSignature(user_id){
+    return db.query('SELECT signURL FROM signature WHERE user_id=$1', [user_id]);
 };
