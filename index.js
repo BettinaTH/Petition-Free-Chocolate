@@ -64,11 +64,12 @@ app.post("/register", (req, res) =>{
                 req.session.id = data.rows[0].id;
                 req.session.first = req.body.first;
                 req.session.last = req.body.last;
-                //req.session.email = req.body.email;
+                req.session.email = req.body.email;
                 console.log('data =>: ', data);
                 res.redirect("/profile");
-            });
-        });   
+            }).catch ( err => {
+                console.log ("app.post register: ", err);}); 
+        });  
     } else {
         res.render('register', {
             layout: "error",
@@ -131,7 +132,7 @@ app.post("/petition", function(req, res) {
         });
     } else {
         db.submitPetition(req.body.signURL, req.session.id);
-        console.log('signature: ', req.body.sig);
+        console.log('signature: ', req.body);
         res.redirect("/thanks");
     }
 });
@@ -145,10 +146,17 @@ app.get("/thanks", function(req, res) {
 });
 
 // GET SIGNERS //
-app.get("/signers", function(req, res) {
-    res.render("signers", {
-        layout: "main"
-    });
+app.get("/signers", (req, res) => {
+    db.allSigners().then(results =>{
+        res.render("signers", {
+            layout: "main", 
+            names: results.rows
+        });
+        console.log("return all signers;", results);
+        //return results.rows;
+    }).catch (err => {
+        console.log('err in return all signers: ', err);
+    });  
 });
 
 

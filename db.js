@@ -47,10 +47,10 @@ module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, ha
 
 // STORE THE USER ID AND SIGNATURE TO TABLE signatrure
 module.exports.submitPetition = function submitPetition(signURL, user_id) {
-    return db.query('INSERT INTO users (sign, user_id) VALUES ($1, $2)', [signURL, user_id]);
+    return db.query('INSERT INTO signature (signURL, user_id) VALUES ($1, $2)', [signURL, user_id]);
 };
 
 // Show all *** check users_id in signature with users TABLE
 module.exports.allSigners = function allSigner(){
-    return db.query('SELECT * FROM users'); 
+    return db.query('SELECT first, last, age, city, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id'); 
 };
