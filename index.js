@@ -54,7 +54,7 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) =>{
-    console.log(req.body);
+    console.log("req.body:",req.body);
 // check the required fields
 // IF all fields are filed out, send data to database (table users), hash the password and redirect them to petition
 // database sends back the users ID as a cookie
@@ -101,8 +101,50 @@ app.post("/profile", function (req, res){
 //LOGIN
 app.get("/login", function(req, res) {
     res.render("login", {
-        layout: "main"
+        layout: "main",
     });
+});
+
+app.post("/login", function(req, res){
+    if(req.body.email && req.body.password){
+        db.checkLogin(req.body.email)
+            .then(profileInfo =>{
+                if(profileInfo.rows[0]){
+                    req.session.first = profileInfo.rows[0].first;
+                    req.session.last = profileInfo.rows[0].last;
+                    req.session.last = profileInfo.rows[0].email;
+                    req.session.id = profileInfo.rows[0].id;
+                    req.session.signed = profileInfo.rows[0].signed;
+                    req.session.logedIn = true;
+                    console.log('print out profileInfo: ', profileInfo);
+                    console.log('req.body.password: ', req.body.password);
+                    console.log('profilInfo.rows: ', profileInfo.rows[0].password); 
+                    db.checkPassword(req.body.password, profileInfo.rows[0].password)
+                        .then(matchingPassword => {
+                            if(matchingPassword == true && req.session.signed){
+                                res.redirect("/thanks");                                
+                            } else if(matchingPassword == true && !req.session.signed) {
+                                res.redirect("/petition");                                
+                            } else {
+                                res.render("login",{
+                                    layout: "main",
+                                    err: "ups, something went wrong, please try again."
+                                });
+                            }  
+                        })
+                        .catch(err=>{
+                            console.log("error checkPassword: ", err);
+                        }); 
+                }
+            }).catch(err =>{
+                console.log('errore checkLogin: ', err)
+            });
+    } else {
+        res.render("login", {
+            layout: "main",
+            err: "Ups, something went wrong, please try again."
+        });
+    }
 });
 
 
@@ -131,9 +173,18 @@ app.post("/petition", function(req, res) {
             layout: "main" 
         });
     } else {
-        db.submitPetition(req.body.signURL, req.session.id);
-        console.log('signature: ', req.body);
-        res.redirect("/thanks");
+        //db.submitPetition(req.body.signURL, req.session.id);
+        //console.log('signature: ', req.body);
+        //res.redirect("/thanks");
+        db.submitPetition(req.body.signURL, req.session.id) //req.session.id = user.id
+            .then(submitSignature =>{
+                req.session.sigened = submitSignature.rows[0].id;
+                res.redirect("/thanks");
+            })
+            .catch(err=>{
+                console.log("error submitPetition: ", err);
+            }); 
+        //console.log('signature: ', req.body);   
     }
 });
     
@@ -165,20 +216,5 @@ app.get("/signers", (req, res) => {
     });  
 });
 
-
-
-
-// SHOW ALL SIGNERS OF THE PETITION
-app.get('/get-cities', (req, res) =>{
-    //this is just for demo purposes
-    db.getAllCities().then(results => {
-        //results.rows -- rows is the property that storoes the result of our query
-        // console.log results would contian all cities in our table
-        // but of course this won`t work right now because we don`t
-        //have a cities table
-    }).catch (err => {
-        console.log('err in getAllCities: ', err);
-    });
-});
 
 app.listen(8080, () => console.log('Petition listening!'));

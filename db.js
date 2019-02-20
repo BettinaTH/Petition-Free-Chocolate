@@ -21,14 +21,15 @@ module.exports.register = function register(first, last, email, password){
         [first, last, email, password]);
 };
 
+
 // USER ADDS MORE PROFILE 
 module.exports.moreProfile = function moreProfile(age, city, url, user_id){
-    return db.query('INSERT INTO users_profile(age, city, url, user_id) VALUES ($1, $2, $3, $4)', [age, city,url, user_id])
+    return db.query('INSERT INTO users_profile(age, city, url, user_id) VALUES ($1, $2, $3, $4)', [age, city,url, user_id]);
 };
 
 // checkin 
 module.exports.checkLogin = function checkLogin(email){
-    return db.query('SELECT * FROM users WHERE email=$1', [email]);
+    return db.query('SELECT first, last, email, p users.id, signature.id AS signed FROM users LEFT JOIN signature ON signature.user_id=users.id WHERE email=$1', [email]);
 };
 // check Password 
 module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
