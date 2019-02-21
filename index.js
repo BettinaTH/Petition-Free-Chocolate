@@ -178,7 +178,7 @@ app.post("/petition", function(req, res) {
         //res.redirect("/thanks");
         db.submitPetition(req.body.signURL, req.session.id) //req.session.id = user.id
             .then(submitSignature =>{
-                req.session.sigened = submitSignature.rows[0].id;
+                //req.session.sigened = submitSignature.rows[0].id;
                 res.redirect("/thanks");
             })
             .catch(err=>{

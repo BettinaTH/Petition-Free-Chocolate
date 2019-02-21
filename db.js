@@ -29,7 +29,7 @@ module.exports.moreProfile = function moreProfile(age, city, url, user_id){
 
 // checkin 
 module.exports.checkLogin = function checkLogin(email){
-    return db.query('SELECT first, last, email, p users.id, signature.id AS signed FROM users LEFT JOIN signature ON signature.user_id=users.id WHERE email=$1', [email]);
+    return db.query('SELECT first, last, email, users.id, signature.id AS signed FROM users LEFT JOIN signature ON signature.user_id=users.id WHERE email=$1', [email]);
 };
 // check Password 
 module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
