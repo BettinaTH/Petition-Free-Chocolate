@@ -243,9 +243,22 @@ app.get("/signers", (req, res) => {
     });  
 });
 
+//SHOW SIGNERS BY City
+app.get("/signers/:city", (req, res) => {
+    db.sameCity(req.params.city).then(data =>{
+        console.log("return same;", data);
+        res.render("signers-select", {
+            layout: "main", 
+            names: data.rows
+        });
+    }).catch (err => {
+        console.log('err in return same city: ', err);
+    });  
+});
+
 // DELETED Signature
 app.get("/unsigned", (req, res) => {
-    res.render("unsigend", {
+    res.render("unsigned", {
         layout: "main"
     });
 });

@@ -54,6 +54,11 @@ module.exports.allSigners = function allSigner(){
     return db.query('SELECT first, last, age, city, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id'); 
 };
 
+// Show all signers by city
+module.exports.sameCity = function sameCity(city){
+    ('SELECT first, last, age, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id WHERE city=$1',[city]);
+};
+
 // show signature image
 module.exports.showSignature = function showSignature(user_id){
     return db.query('SELECT signURL FROM signature WHERE user_id=$1', [user_id]);
