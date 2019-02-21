@@ -29,7 +29,7 @@ module.exports.moreProfile = function moreProfile(age, city, url, user_id){
 
 // checkin 
 module.exports.checkLogin = function checkLogin(email){
-    return db.query('SELECT first, last, email, users.id, signature.id AS signed FROM users LEFT JOIN signature ON signature.user_id=users.id WHERE email=$1', [email]);
+    return db.query('SELECT first, last, email, password, users.id, signature.id AS signed FROM users LEFT JOIN signature ON signature.user_id=users.id WHERE email=$1', [email]);
 };
 // check Password 
 module.exports.checkPassword = function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
@@ -58,3 +58,14 @@ module.exports.allSigners = function allSigner(){
 module.exports.showSignature = function showSignature(user_id){
     return db.query('SELECT signURL FROM signature WHERE user_id=$1', [user_id]);
 };
+
+//DELETE Signature
+module.exports.deleteSignature = function deleteSignature(user_id){
+    return db.query('DELETE * FROM signature WHERE user_id=$1');
+};
+
+// EDITING Profile
+module.exports.showFullProfile = function showFullProfile (user_id){ 
+    return db.query('SELECT first, last, age, city, url, password, email FROM users LEFT JOIN users_profile ON users.id=users_profile.user_id WHERE user_id=$1', [user_id]);
+};
+

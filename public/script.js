@@ -28,5 +28,15 @@ canvasSignature.addEventListener("mousedown", (e) => {
 document.addEventListener("mouseup", function(){  
     console.log("end point");
     canvasSignature.removeEventListener("mousemove", mousemove);
+    console.log(canvasSignature.toDataURL);
     document.querySelector("input[type='hidden']").value = canvasSignature.toDataURL();
 });
+
+function checkURL (abc) {
+    var string = abc.value;
+    if (!~string.indexOf("http") || !~string.indexOf("https")  ) {
+        string = "http://" + string;
+    }
+    abc.value = string;
+    return abc;
+}

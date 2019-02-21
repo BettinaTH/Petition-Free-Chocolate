@@ -1,16 +1,16 @@
 <h2>Edit Profile</h2>
 </div>
 <form method="POST" class="form">
-
+        {{#fullProfile}}
         <input name="first" placeholder="First name" value="{{first}}">
         <input name="last" placeholder="Last name" value="{{last}}">
         <input name="email" placeholder="email" value="{{email}}">
-        <input name="pass" placeholder="******">
+        <input name="password" placeholder="******">
         <input name="age" placeholder="age" value="{{age}}">
         <input name="city" placeholder="city" value="{{city}}">
         <inpu name="url" placeholder="url" value="{{url}}">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button type="submit" class="button"> Submit</button>
-
+        {{/fullProfile}}
  
 </form>

@@ -8,7 +8,13 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
 </head>
 <body>
+    
     <h1>A petition initiated by Bettina Thies</h1>
+    <div id=logout>
+        {{#unless hideLogout}}
+        {{>logout}}
+        {{/unless}}
+    </div>
 
     
     {{{body}}}

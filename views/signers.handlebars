@@ -1,13 +1,16 @@
-<h2>Alle the signers</h2>
+<h2>everyone of these signers want free chocolate\q</h2>
 
 <p>We the undersigned demand 1kg chcolate for free for all german citizens</p>
 
 <ul class="signers">
     {{#names}}
-        <li>
-            {{first}} {{last}} {{age}} {{city}}
-        </li>
+    <li>
+     {{#if url}}
+     <a href="{{url}}" target="_blank">{{first}} {{last}}, </a>
+        {{else}}
+            {{first}} {{last}},
+    {{/if}}
+    {{age}} 
+    <a href="/signers/{{city}}">{{city}}</a>
     {{/names}}
-
-    <button></button>
 </ul>

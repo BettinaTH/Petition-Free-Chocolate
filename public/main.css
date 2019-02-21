@@ -23,3 +23,19 @@ canvas{
 strong{
     color: #7F177B;;
 }
+.logout{
+       color: rgb(255, 255, 255); 
+       font-size: 30px; 
+       line-height: 30px; 
+       padding: 6px; 
+       border-radius: 10px; 
+       font-family: Verdana, Geneva, Tahoma, sans-serif; 
+       font-weight: normal; 
+       text-decoration: none; 
+       font-style: normal; 
+       font-variant: normal; 
+       text-transform: none; 
+       background-image: #7F177B;
+       border: 2px solid rgb(35, 3, 87); 
+       display: inline-block;}
+}

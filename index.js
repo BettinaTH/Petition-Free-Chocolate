@@ -46,10 +46,19 @@ app.use(
     express.static('./public')
 );
 
+app.use(function (req, res, next){
+    if (!req.session.id && req.url != '/register' && req.url != '/login'){
+        res.redirect('/register');
+    } else {
+        next();
+    }
+});
+
 // REGISTER
 app.get("/register", (req, res) => {
     res.render("register", {
-        layout: "main"
+        layout: "main",
+        hideLogout: true
     });
 });
 
@@ -79,7 +88,7 @@ app.post("/register", (req, res) =>{
 // USER PROFILE
 app.get("/profile", (req, res) => {
     res.render("user_profiles", {
-        layout: "main"
+        layout: "main",
     });
 });
 app.post("/profile", (req, res) =>{
@@ -102,6 +111,7 @@ app.post("/profile", function (req, res){
 app.get("/login", function(req, res) {
     res.render("login", {
         layout: "main",
+        hideLogout: true
     });
 });
 
@@ -137,7 +147,7 @@ app.post("/login", function(req, res){
                         }); 
                 }
             }).catch(err =>{
-                console.log('errore checkLogin: ', err)
+                console.log('errore checkLogin: ', err);
             });
     } else {
         res.render("login", {
@@ -147,18 +157,28 @@ app.post("/login", function(req, res){
     }
 });
 
-
+/*
 // EDITING PROFILE
 app.get("/edit", function(req, res) {
-    res.render("editing", {
-        layout: "main"
-    });
+    db.showFullProfile(req.session.id).then(results =>{
+        res.render("editing", {
+            layout: "main", 
+            fullProfile: results.rows
+        });
+        console.log("return full profile;", results);
+    }).catch (err => {
+        console.log('err in return full profile: ', err);
+    });  
 });
+
+app.post("edit", (req, res) =>{
+
+});*/
 
 
 
 // GET PETITION//
-app.get("/petition", function(req, res) {
+app.get("/petition", (req, res) => {
     res.render("petition", {
         layout: "main"
     });
@@ -189,7 +209,7 @@ app.post("/petition", function(req, res) {
 });
     
 
-// GET THANKS //
+// THANKS //
 app.get("/thanks", (req, res) => {
     db.showSignature(req.session.id).then(result =>{
         console.log('err results: ', result.rows[0]);
@@ -199,6 +219,13 @@ app.get("/thanks", (req, res) => {
             sig: result.rows[0].signurl
 
         });
+    });
+});
+
+app.post('/thanks', (rep, res) =>{
+    db.deleteSignature(rep.session.id).then(deleteSig => {
+        //req.session.signed = false
+        res.redirect('/petition');
     });
 });
 
@@ -214,6 +241,18 @@ app.get("/signers", (req, res) => {
     }).catch (err => {
         console.log('err in return all signers: ', err);
     });  
+});
+
+// DELETED Signature
+app.get("/unsigned", (req, res) => {
+    res.render("unsigend", {
+        layout: "main"
+    });
+});
+
+app.get("/logout", function(req, res) {
+    req.session = null;
+    res.redirect("/register");
 });
 
 

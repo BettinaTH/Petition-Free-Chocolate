@@ -1,12 +1,12 @@
 <h2> PLEASE log in </h2>
     <form method="POST">
+<div>{{err}}</div>
     <div>
         <div class="login">
-        <input id="email" name="email" placeholder="Email" value="{{email}}">
-        <input id="password" name="password" type="password" placeholder="******">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <div class="login">
+            <input id="email" name="email" placeholder="Email" value="{{email}}">
+            <input id="password" name="password" type="password" placeholder="******">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button type="submit" class="button"> login</button>
-            </div>
+        </div>
     </div>    
     </form>
