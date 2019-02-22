@@ -189,8 +189,7 @@ app.post("/petition", function(req, res) {
     console.log(req.body);
     if (!req.body.first || !req.body.last ||!req.body.signURL) {
         res.render("petition",{
-            err: "All fields are required",
-            layout: "main" 
+            layout: "error" 
         });
     } else {
         //db.submitPetition(req.body.signURL, req.session.id);
@@ -246,7 +245,6 @@ app.get("/signers", (req, res) => {
 //SHOW SIGNERS BY City
 app.get("/signers/:city", (req, res) => {
     db.sameCity(req.params.city).then(data =>{
-        console.log("return same;", data);
         res.render("signers-select", {
             layout: "main", 
             names: data.rows
@@ -259,7 +257,7 @@ app.get("/signers/:city", (req, res) => {
 // DELETED Signature
 app.get("/unsigned", (req, res) => {
     res.render("unsigned", {
-        layout: "main"
+        layout: "blanc"
     });
 });
 
@@ -268,5 +266,4 @@ app.get("/logout", function(req, res) {
     res.redirect("/register");
 });
 
-
-app.listen(8080, () => console.log('Petition listening!'));
+app.listen(process.env.PORT || 8080, () => console.log('Petition listening!'));

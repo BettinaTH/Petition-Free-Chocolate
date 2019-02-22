@@ -1,6 +1,36 @@
 /*the main css of the website*/
 body{
-    background-color: chocolate
+    background-image: url("mercihearts.jpg");
+    background-size: cover;
+    background-position: top;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #7F177B;
+}
+.headline{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start
+}
+.image-back{
+    background-position: center
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 250px; 
+    height: 300px; 
+    justify-content: flex-start
+}
+input{
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+button{
+    margin-left: 20px;
+}
+.nav{
+    display: flex;
+    justify-content: flex-start;
 }
 
 h1{
@@ -16,6 +46,7 @@ p{
 }
 canvas{
     border: 2px dotted #000000;
+    margin-bottom:5px; 
 }
 .signup{
     display: inline-block;
@@ -23,19 +54,24 @@ canvas{
 strong{
     color: #7F177B;;
 }
-.logout{
-       color: rgb(255, 255, 255); 
-       font-size: 30px; 
-       line-height: 30px; 
-       padding: 6px; 
-       border-radius: 10px; 
-       font-family: Verdana, Geneva, Tahoma, sans-serif; 
-       font-weight: normal; 
-       text-decoration: none; 
-       font-style: normal; 
-       font-variant: normal; 
-       text-transform: none; 
-       background-image: #7F177B;
-       border: 2px solid rgb(35, 3, 87); 
-       display: inline-block;}
+#logout-box{
+    display: flex;
+    justify-content: center;
+    height: 50px;
+}
+#logout{
+    color: rgb(255, 255, 255); 
+    font-size: 20px; 
+    line-height: 30px; 
+    padding: 6px; 
+    border-radius: 4px; 
+    font-family: Verdana, Geneva, Tahoma, sans-serif; 
+    background-color: #7F177B;
+    background-image: #7F177B;
+    height: 30px;
+}
+.kid{
+    width: 200px;
+    height: 80%;
+    border:2px #7F177B;
 }

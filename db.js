@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 var spicedPg = require('spiced-pg');
 
 
-var db = spicedPg('postgres:postgres:postgres@localhost:5432/wintergreen-petition');
+var db = process.env.DATABASE_URL || spicedPg('postgres:postgres:postgres@localhost:5432/wintergreen-petition');
 
 /* This QUERY is just for Demo purpose
 
@@ -56,7 +56,7 @@ module.exports.allSigners = function allSigner(){
 
 // Show all signers by city
 module.exports.sameCity = function sameCity(city){
-    ('SELECT first, last, age, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id WHERE city=$1',[city]);
+    return db.query('SELECT first, last, age, url FROM signature LEFT JOIN users ON users.id=signature.user_id LEFT JOIN users_profile ON users.id=users_profile.user_id WHERE city=$1',[city]);
 };
 
 // show signature image

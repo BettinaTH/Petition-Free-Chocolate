@@ -4,11 +4,13 @@
 <p> Sign up for my petition to get 1kg chocolate for free every month</p>
 
 <form method="POST">
-    <div class = "signup">
+    <div class = "form">
+        {{err}}
         <input name="first" placeholder="First name" value={{first}}>
         <input name="last" placeholder="Last name" value={{last}}>
         <input name="signURL" type="hidden">
         <input name="_csrf" type="hidden" value={{csrfToken}}>
+        <p>Please sign using the mouse.</p>
         <canvas id="signature" name="sig" width="500" height="100"></canvas>
         <button name="button">Submit</button>
     </div>
