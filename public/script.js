@@ -14,12 +14,18 @@ function draw(x,y){
     context.lineTo(x,y);
     context.stroke();
 }
+function handleMove(e) {
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    draw(x, y);
+}
 
 function mousemove(e){
     draw(e.offsetX, e.offsetY);
 }
 // Mouse events
 canvasSignature.addEventListener("mousedown", (e) => {
+
     context.moveTo(e.offsetX, e.offsetY);
     console.log('mousedown: ', 'startingpoint');
     canvasSignature.addEventListener("mousemove", mousemove);
