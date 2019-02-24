@@ -91,7 +91,7 @@ app.get("/profile", (req, res) => {
 });
 app.post("/profile", (req, res) =>{
     console.log("profile: ", req.body);
-    db.moreProfile(req.body.age, req.body.city, req.body.url, req.session.id).then(data =>{
+    db.moreProfile(req.body.age || null, req.body.city, req.body.url, req.session.id).then(data =>{
         res.redirect("/petition");
     }).catch(err =>{
         console.log ('err in post profile: ', err);
@@ -166,11 +166,12 @@ app.get("/edit", function(req, res) {
     });  
 });
 
-app.post("edit", (req, res) =>{
+app.post("/edit", (req, res) =>{
     if (req.body.password) {
+        console.log('post edit req.body:', req.body);
         hashPassword(req.body.password).then(hashedPassword =>{
             db.updateProfilePW(req.body.first, req.body.last, req.body.email, hashedPassword, 
-                req.body.age, req.body.city, req.body.url).then(update =>{
+                req.body.age, req.body.city, req.body.url, req.session.id).then(update =>{
                 res.redirect("/thanks");
             }).catch(err =>{
                 console.log( 'err in edit with pw: ', err);
@@ -178,10 +179,10 @@ app.post("edit", (req, res) =>{
         });
     }else {
         db.updateProfile(req.body.first, req.body.last, req.body.email, 
-            req.body.age, req.body.city, req.body.url).then(update =>{
+            req.body.age, req.body.city, req.body.url, req.session.id).then(update =>{
             res.redirect("/thanks");
         }).catch(err =>{
-            console.log( 'err in edit with pw: ', err);
+            console.log( 'err in edit without pw: ', err);
         });
     }
 });

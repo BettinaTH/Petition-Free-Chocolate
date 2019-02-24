@@ -21,7 +21,6 @@ module.exports.register = function register(first, last, email, password){
         [first, last, email, password]);
 };
 
-
 // USER ADDS MORE PROFILE 
 module.exports.moreProfile = function moreProfile(age, city, url, user_id){
     return db.query('INSERT INTO users_profile(age, city, url, user_id) VALUES ($1, $2, $3, $4)', [age, city,url, user_id]);
@@ -78,6 +77,9 @@ module.exports.updateProfile = function updateProfile (first, last, email, age, 
     return db.query('INSERT first, last, email, age, city, url FROM users LEFT JOIN users_profile ON users.id=users_profile.user_id VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (user_id) DO UPDATE SET first = $1, last = $2, email = $3, age = $4, city = $5, url=$6 ',[first, last, email, age, city, url, user_id]);
 };
 module.exports.updateProfilePW = function updateProfilePW (first, last, email, password, age, city, url, user_id){
-    return db.query('INSERT first, last, email, password, age, city, url FROM users LEFT JOIN users_profile ON users.id=users_profile.user_id VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (user_id) DO UPDATE SET first = $1, last = $2, email = $3,  password = $4, age = $5, city = $6, url=$7 ',[first, last, email, password, age, city, url, user_id]);
+    return db.query(`INSERT first, last, email, password, age, 
+    city, url FROM users LEFT JOIN users_profile ON users.id=users_profile.user_id VALUES 
+    ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (user_id) DO UPDATE SET first = $1, last = $2, email = $3,  
+    password = $4, age = $5, city = $6, url=$7`,[first, last, email, password, age, city, url, user_id]);
 };
 
