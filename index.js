@@ -157,13 +157,15 @@ app.post("/login", function(req, res){
     }
 });
 
-/*
+
 // EDITING PROFILE
 app.get("/edit", function(req, res) {
     db.showFullProfile(req.session.id).then(results =>{
+        console.log('results edit: ', results);
         res.render("editing", {
             layout: "main", 
-            fullProfile: results.rows
+            fullProfile: results.rows,
+            //url: results.rows[0].url
         });
         console.log("return full profile;", results);
     }).catch (err => {
@@ -172,8 +174,12 @@ app.get("/edit", function(req, res) {
 });
 
 app.post("edit", (req, res) =>{
-
-});*/
+    db.updateUsersProfile(req.session.id).then(update =>{
+        res.redirect("/thanks");
+    }).catch(err =>{
+        console.log('err in update usersProfile: ', err);
+    });
+});
 
 
 
