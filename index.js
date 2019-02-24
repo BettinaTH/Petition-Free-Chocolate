@@ -39,8 +39,6 @@ app.use(function(req, res, next) {
 
 //app.use(cookieParser());
 
-
-
 // LINK TO THE CSS
 app.use(
     express.static('./public')
@@ -93,19 +91,12 @@ app.get("/profile", (req, res) => {
 });
 app.post("/profile", (req, res) =>{
     console.log("profile: ", req.body);
-    db.moreProfile(req.body.age, req.body.city, req.body.url, req.session.id);
-    res.redirect("/petition");
-});
-
-
-/*
-app.post("/profile", function (req, res){
-    if (req.session.age || req.session.city || req.session.url){
-// put data in new table users_profile
+    db.moreProfile(req.body.age, req.body.city, req.body.url, req.session.id).then(data =>{
+        res.redirect("/petition");
+    }).catch(err =>{
+        console.log ('err in post profile: ', err);
     });
-});*/
-
-
+});
 
 //LOGIN
 app.get("/login", function(req, res) {
@@ -162,9 +153,11 @@ app.post("/login", function(req, res){
 app.get("/edit", function(req, res) {
     db.showFullProfile(req.session.id).then(results =>{
         console.log('results edit: ', results);
+        console.log('req.session.id: ', req.session.id);
         res.render("editing", {
             layout: "main", 
             fullProfile: results.rows,
+            //fullProfile.first: results.rows[0].first,
             //url: results.rows[0].url
         });
         console.log("return full profile;", results);
@@ -174,11 +167,23 @@ app.get("/edit", function(req, res) {
 });
 
 app.post("edit", (req, res) =>{
-    db.updateUsersProfile(req.session.id).then(update =>{
-        res.redirect("/thanks");
-    }).catch(err =>{
-        console.log('err in update usersProfile: ', err);
-    });
+    if (req.body.password) {
+        hashPassword(req.body.password).then(hashedPassword =>{
+            db.updateProfilePW(req.body.first, req.body.last, req.body.email, hashedPassword, 
+                req.body.age, req.body.city, req.body.url).then(update =>{
+                res.redirect("/thanks");
+            }).catch(err =>{
+                console.log( 'err in edit with pw: ', err);
+            });
+        });
+    }else {
+        db.updateProfile(req.body.first, req.body.last, req.body.email, 
+            req.body.age, req.body.city, req.body.url).then(update =>{
+            res.redirect("/thanks");
+        }).catch(err =>{
+            console.log( 'err in edit with pw: ', err);
+        });
+    }
 });
 
 
