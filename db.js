@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 var spicedPg = require('spiced-pg');
 
 
-var db = process.env.DATABASE_URL || spicedPg('postgres:postgres:postgres@localhost:5432/wintergreen-petition');
+var db = spicedPg(process.env.DATABASE_URL || 'postgres:postgres:postgres@localhost:5432/wintergreen-petition');
 
 /* This QUERY is just for Demo purpose
 
