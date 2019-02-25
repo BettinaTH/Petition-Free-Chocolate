@@ -148,8 +148,8 @@ app.post("/login", function(req, res){
     }
 });
 
-
-// EDITING PROFILE
+/*
+// EDITING PROFILE NOT WORKING
 app.get("/edit", function(req, res) {
     db.showFullProfile(req.session.id).then(results =>{
         console.log('results edit: ', results);
@@ -185,7 +185,7 @@ app.post("/edit", (req, res) =>{
             console.log( 'err in edit without pw: ', err);
         });
     }
-});
+}); */
 
 
 
@@ -259,7 +259,8 @@ app.get("/signers/:city", (req, res) => {
     db.sameCity(req.params.city).then(data =>{
         res.render("signers-select", {
             layout: "main", 
-            names: data.rows
+            names: data.rows,
+            city: req.params.city
         });
     }).catch (err => {
         console.log('err in return same city: ', err);
