@@ -1,19 +1,18 @@
 
 <h2> Please register and sign up </h2>
-<h2>for my petition to get 1kg chocolate for free every month.</h2>
     <form method="POST">
     
-    <div class="form">
-        <input name="first" placeholder="First name" value="{{first}}">
-        <input name="last" placeholder="Last name" value="{{last}}">
-        <input id="email" name="email" placeholder="Email" value="{{email}}">
-        <input id="password" name="password" type="password" placeholder="******">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <div class="Register">
-            <button type="submit" class="button"> SIGN UP</button>
-            </div>
-    </div>    
-    <div>
-        <h3>If your are already registered, please <a href="/login">LOGIN</a></h3>
-    </div>
+        <div class="form">
+            <input name="first" placeholder="First name" value="{{first}}">
+            <input name="last" placeholder="Last name" value="{{last}}">
+            <input id="email" name="email" placeholder="Email" value="{{email}}">
+            <input id="password" name="password" type="password" placeholder="******">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <div class="Register">
+                <button type="submit" class="button"> SIGN UP</button>
+                </div>
+        </div>    
     </form>
+    <div>
+        <h4>If your are already registered, please <a href="/login">LOGIN</a></h4>
+    </div>

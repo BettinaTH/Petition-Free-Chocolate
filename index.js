@@ -7,8 +7,7 @@ const db = require ('./db');
 const hashPassword = require ('./auth.js').hashPassword;
 
 
-
-/// HANDLEBARS DO NOT TOUCH CODE BELOW /////
+// HANDLEBARS DO NOT TOUCH CODE BELOW
 var hb = require('express-handlebars');
 app.engine('handlebars', hb());
 app.set('view engine', 'handlebars');
@@ -16,12 +15,11 @@ app.use(function (req, res, next) {
     console.log(req.url);
     next();
 });
-/// HANDLEBARS DO NOT TOUCH CODE ABOVE /////
 
 // COOKIE SESSION
 app.use(cookieSession({
     secret: `I'm always angry.`,
-    maxAge: 1000 * 60 * 60 * 24 * 14 // Cookies lasts 2 weeks
+    maxAge: 1000 * 60 * 60 * 24 * 14
 }));
 
 app.use(bodyParser.urlencoded({
@@ -37,7 +35,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-//app.use(cookieParser());
 
 // LINK TO THE CSS
 app.use(
@@ -62,9 +59,6 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) =>{
     console.log("req.body:",req.body);
-// check the required fields
-// IF all fields are filed out, send data to database (table users), hash the password and redirect them to petition
-// database sends back the users ID as a cookie
     if (req.body.first && req.body.last && req.body.email && req.body.password){
         hashPassword(req.body.password).then(hashedPassword =>{
             db.register(req.body.first, req.body.last, req.body.email, hashedPassword).then(data => {
@@ -89,8 +83,8 @@ app.get("/profile", (req, res) => {
         layout: "main",
     });
 });
+
 app.post("/profile", (req, res) =>{
-    console.log("profile: ", req.body);
     db.moreProfile(req.body.age || null, req.body.city, req.body.url, req.session.id).then(data =>{
         res.redirect("/petition");
     }).catch(err =>{
@@ -98,7 +92,7 @@ app.post("/profile", (req, res) =>{
     });
 });
 
-//LOGIN
+// LOGIN
 app.get("/login", function(req, res) {
     res.render("login", {
         layout: "main",
@@ -117,9 +111,6 @@ app.post("/login", function(req, res){
                     req.session.id = profileInfo.rows[0].id;
                     req.session.signed = profileInfo.rows[0].signed;
                     req.session.logedIn = true;
-                    console.log('print out profileInfo: ', profileInfo);
-                    console.log('req.body.password: ', req.body.password);
-                    console.log('profilInfo.rows: ', profileInfo.rows[0].password); 
                     db.checkPassword(req.body.password, profileInfo.rows[0].password)
                         .then(matchingPassword => {
                             if(matchingPassword == true && req.session.signed){
@@ -148,8 +139,8 @@ app.post("/login", function(req, res){
     }
 });
 
-/*
-// EDITING PROFILE NOT WORKING
+
+// EDITING PROFILE
 app.get("/edit", function(req, res) {
     db.showFullProfile(req.session.id).then(results =>{
         console.log('results edit: ', results);
@@ -167,29 +158,31 @@ app.get("/edit", function(req, res) {
 });
 
 app.post("/edit", (req, res) =>{
+    console.log('post edit req.body:', req.body);
+    console.log('post edit session.id:', req.session.id);
     if (req.body.password) {
-        console.log('post edit req.body:', req.body);
         hashPassword(req.body.password).then(hashedPassword =>{
-            db.updateProfilePW(req.body.first, req.body.last, req.body.email, hashedPassword, 
-                req.body.age, req.body.city, req.body.url, req.session.id).then(update =>{
+            Promise.all([
+                db.updateProfilePW(req.body.first, req.body.last, req.body.email, hashedPassword,req.session.id), 
+                db.updateMoreProfile(req.body.age, req.body.city, req.body.url, req.session.id)]).then(update =>{
                 res.redirect("/thanks");
             }).catch(err =>{
                 console.log( 'err in edit with pw: ', err);
             });
         });
     }else {
-        db.updateProfile(req.body.first, req.body.last, req.body.email, 
-            req.body.age, req.body.city, req.body.url, req.session.id).then(update =>{
+        Promise.all([
+            db.updateProfile(req.body.first, req.body.last, req.body.email, req.session.id),
+            db.updateMoreProfile(req.body.age, req.body.city, req.body.url, req.session.id)
+        ]).then(update =>{
             res.redirect("/thanks");
         }).catch(err =>{
             console.log( 'err in edit without pw: ', err);
         });
     }
-}); */
+});
 
-
-
-// GET PETITION//
+// GET PETITION
 app.get("/petition", (req, res) => {
     res.render("petition", {
         layout: "main"
@@ -204,9 +197,6 @@ app.post("/petition", function(req, res) {
             layout: "error" 
         });
     } else {
-        //db.submitPetition(req.body.signURL, req.session.id);
-        //console.log('signature: ', req.body);
-        //res.redirect("/thanks");
         db.submitPetition(req.body.signURL, req.session.id) //req.session.id = user.id
             .then(submitSignature =>{
                 //req.session.sigened = submitSignature.rows[0].id;
@@ -214,13 +204,12 @@ app.post("/petition", function(req, res) {
             })
             .catch(err=>{
                 console.log("error submitPetition: ", err);
-            }); 
-        //console.log('signature: ', req.body);   
+            });  
     }
 });
     
 
-// THANKS //
+// THANKS 
 app.get("/thanks", (req, res) => {
     db.showSignature(req.session.id).then(result =>{
         console.log('err results: ', result.rows[0]);
@@ -236,11 +225,14 @@ app.get("/thanks", (req, res) => {
 app.post('/thanks', (rep, res) =>{
     db.deleteSignature(rep.session.id).then(deleteSig => {
         //req.session.signed = false
-        res.redirect('/petition');
-    });
+        res.redirect('/unsigned');
+    })
+        .catch (err =>{
+            console.log("err in post thanks: ", err);
+        });
 });
 
-// GET SIGNERS //
+// GET SIGNERS 
 app.get("/signers", (req, res) => {
     db.allSigners().then(results =>{
         res.render("signers", {
@@ -248,7 +240,6 @@ app.get("/signers", (req, res) => {
             names: results.rows
         });
         console.log("return all signers;", results);
-        //return results.rows;
     }).catch (err => {
         console.log('err in return all signers: ', err);
     });  

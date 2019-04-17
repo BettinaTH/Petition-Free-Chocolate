@@ -1,15 +1,12 @@
 <h2>Thank you for signing my petition</h2>
 
 <p>Thank you for your signature</p>
-
-<img src={{sig}}>
-
-<div>
-    <a href="/signers">see all singers of the petition</a>
+<div class="background">
+    <img src={{sig}}>
 </div>
-<!--<div> EDITING NOT WORKING
-    <a href="/edit">edit your profile</a>
-</div> -->
-<div>
-    <a href="/unsigned">delete my signature</a>
+
+    <form method="POST">
+        <button id="delete-signature" name="button">DELETE MY SIGNATURE</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </form>
 </div>
